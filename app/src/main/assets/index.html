@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07110d">
+<title>WINE — HTML Deployer</title>
+<style>
+:root{--bg:#07110d;--panel:#0d1a14;--panel2:#102219;--line:#20392b;--green:#40e18a;--green2:#19b765;--text:#effaf3;--muted:#91a99a;--danger:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#163b28 0,transparent 52%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+.wrap{width:min(920px,100%);margin:auto;padding:24px 17px 50px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:38px}.brand{display:flex;align-items:center;gap:11px;font-size:22px;font-weight:850;letter-spacing:2px}.tag{border:1px solid var(--line);border-radius:99px;padding:7px 11px;color:var(--muted);font-size:12px}
+.dashboard{display:block;margin:-8px 0 24px;width:100%}.info-card{width:100%;background:linear-gradient(115deg,#10251a,#0a1510 70%,#10281a);border:1px solid #2a593b;border-radius:19px;padding:clamp(16px,3.5vw,23px);min-width:0;box-shadow:0 12px 35px #0002, inset 0 1px #ffffff05;position:relative;overflow:hidden}.info-card:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:.8}.date-label{font-size:10px;letter-spacing:1.7px;text-transform:uppercase;color:var(--green);font-weight:850}.date-line{font-size:clamp(15px,3.8vw,19px);color:#effaf3;font-weight:800;letter-spacing:.2px;margin-top:6px;text-transform:capitalize}.info-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:17px;padding-top:15px;border-top:1px solid #254632}.clock-side{min-width:0;flex:1}.info-label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:800}.clock{font-size:clamp(25px,7vw,38px);font-weight:850;letter-spacing:1px;margin:5px 0 0;font-variant-numeric:tabular-nums;white-space:nowrap}.weather-side{min-width:0;max-width:55%;display:flex;align-items:center;gap:10px}.weather-icon{font-size:clamp(27px,6vw,36px);flex-shrink:0}.weather-temp{font-size:clamp(21px,5vw,28px);font-weight:850;white-space:nowrap}.weather-detail{font-size:11px;color:#b5cbbd;line-height:1.45;margin-top:3px}.weather-btn{margin-top:7px;border:1px solid #2a563b;border-radius:8px;background:#102b1b;color:var(--green);font-weight:750;padding:7px 9px;font-size:10px;cursor:pointer}.contact-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:20px 0 0}.contact-link{display:flex;align-items:center;gap:8px;text-decoration:none;color:#dff9e8;border:1px solid #285139;background:#0d2015;padding:11px 14px;border-radius:12px;font-size:13px;font-weight:750}.contact-link:hover{border-color:var(--green);box-shadow:0 0 18px #40e18a15}.hero{text-align:center;margin:0 auto 30px;max-width:620px}.eyebrow{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}h1{font-size:clamp(34px,7vw,54px);letter-spacing:-2px;line-height:1.05;margin:15px 0 13px}.accent{color:var(--green)}.hero p{color:var(--muted);line-height:1.65;margin:0;font-size:15px}
+.panel{background:linear-gradient(160deg,#102119,#0a1510);border:1px solid var(--line);border-radius:23px;padding:clamp(17px,4vw,28px);box-shadow:0 22px 70px #0003}.section-title{font-size:15px;font-weight:750;margin:0 0 14px;display:flex;align-items:center;gap:9px}.num{width:25px;height:25px;display:grid;place-items:center;background:#173c28;color:var(--green);border-radius:8px;font-size:12px}
+.field{margin-bottom:23px}label{display:block;font-size:13px;color:#d7e8dd;font-weight:650;margin-bottom:9px}input[type=text]{width:100%;border:1px solid #294535;background:#08130d;color:var(--text);border-radius:12px;padding:14px 15px;font:inherit;outline:none;transition:.2s}input[type=text]:focus{border-color:var(--green);box-shadow:0 0 0 3px #40e18a16}.hint{font-size:12px;color:var(--muted);margin-top:8px}
+.drop{border:1.5px dashed #355a43;background:#09170f;border-radius:16px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;cursor:pointer;transition:.2s}.drop:hover,.drop.drag{border-color:var(--green);background:#0e2417}.upload-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#153c27;color:var(--green);font-size:24px;margin-bottom:12px}.drop strong{font-size:14px}.drop span{font-size:12px;color:var(--muted);margin-top:7px}.file-status{display:none;margin-top:12px;background:#11291b;border:1px solid #285b3a;border-radius:11px;padding:11px 13px;font-size:13px;overflow-wrap:anywhere}.file-status.show{display:flex;align-items:center;gap:9px}.file-status .filename{flex:1}.file-status b{color:var(--green)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:25px}.btn{border:0;border-radius:13px;padding:15px 18px;font:inherit;font-size:14px;font-weight:800;display:flex;justify-content:center;align-items:center;gap:9px;cursor:pointer;transition:transform .15s,filter .15s}.btn:active{transform:scale(.98)}.btn-preview{background:#17271d;color:var(--text);border:1px solid #2c4936}.btn-deploy{background:linear-gradient(110deg,var(--green),#27c873);color:#052212;box-shadow:0 8px 25px #21c86b25}.btn:hover{filter:brightness(1.08)}.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.status{display:none;margin-top:16px;padding:13px 14px;border-radius:12px;font-size:13px;line-height:1.55}.status.show{display:block}.status.info{background:#12271b;border:1px solid #2b5739;color:#c9f7d8}.status.warn{background:#291f10;border:1px solid #67502b;color:#ffe3a7}.status.error{background:#2b1515;border:1px solid #693232;color:#ffc2c2}
+.result{display:none;margin-top:18px;border:1px solid #2a593b;border-radius:18px;padding:22px 18px;background:linear-gradient(150deg,#12301f,#0a1510);text-align:center;position:relative;overflow:hidden;box-shadow:0 14px 40px #21c86b14}.result.show{display:block}.result:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}.result-badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 12px;border-radius:99px;background:#173c28;color:var(--green)}.result-badge.wait{background:#291f10;color:#ffe3a7}.result h3{margin:13px 0 14px;font-size:20px}.result-url{display:flex;align-items:center;gap:8px;background:#08130d;border:1px solid #294535;border-radius:12px;padding:6px 6px 6px 13px;margin-bottom:14px}.result-url span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;font-size:13px;color:#c9f7d8}.result-url button{border:1px solid #2c4936;background:#17271d;color:var(--text);border-radius:9px;padding:8px 12px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}.login-btn{display:flex;justify-content:center;align-items:center;gap:10px;text-decoration:none;border-radius:13px;padding:15px 18px;font-weight:850;font-size:15px;background:linear-gradient(110deg,var(--green),#27c873);color:#052212;box-shadow:0 8px 28px #21c86b35;transition:.15s}.login-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.login-btn.disabled{opacity:.4;pointer-events:none;box-shadow:none}.result-note{font-size:12px;color:var(--muted);margin-top:12px}
+[hidden]{display:none!important}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#08130d;border:1px solid var(--line);border-radius:15px;padding:5px;margin-bottom:24px}.tab{border:0;border-radius:11px;background:transparent;color:var(--muted);font:inherit;font-weight:800;font-size:14px;padding:12px 8px;cursor:pointer;transition:.15s}.tab.active{background:linear-gradient(110deg,var(--green),#27c873);color:#052212;box-shadow:0 6px 20px #21c86b25}input[type=file]{width:100%;border:1px dashed #355a43;background:#09170f;color:var(--muted);border-radius:12px;padding:12px;font:inherit;font-size:13px}input[type=file]::file-selector-button{border:0;border-radius:9px;background:#153c27;color:var(--green);font-weight:800;padding:8px 12px;margin-right:10px;cursor:pointer}
+.preview-panel{display:none;margin-top:20px;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#fff}.preview-panel.show{display:block}.preview-close{border:1px solid #315640;background:#14251a;color:#eaffef;border-radius:9px;padding:7px 10px;font-weight:800;cursor:pointer}.preview-close:hover{background:#203d2b}.preview-head{background:#0d1a14;color:var(--text);padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}.lights{display:flex;gap:5px}.lights i{width:8px;height:8px;border-radius:50%;background:#365440}.preview-head small{color:var(--muted)}iframe{display:block;width:100%;height:440px;border:0;background:#fff}.footer{text-align:center;color:#637d6b;font-size:12px;margin:24px 0 0}.footer b{color:#8dcaa3}
+@keyframes logopulse{0%,100%{filter:drop-shadow(0 0 4px #40e18a88)}50%{filter:drop-shadow(0 0 11px #40e18a)}}
+.info-card,.panel,.result,.preview-panel,.contact-link,.file-status.show,.logo{position:relative}
+.info-card,.panel,.preview-panel{box-shadow:0 0 28px #40e18a1c,0 14px 40px #0003}
+.result{box-shadow:0 0 30px #40e18a26,0 14px 40px #21c86b14}
+.contact-link:hover{box-shadow:0 0 22px #40e18a40}
+.logo{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:radial-gradient(circle at 50% 30%,#12301f,#06100a);box-shadow:0 0 24px #40e18a40,inset 0 0 14px #40e18a22}
+.logo>svg:not(.neon-svg){width:28px;height:28px;animation:logopulse 2.8s ease-in-out infinite}
+.brand span{background:linear-gradient(90deg,#effaf3,#40e18a 60%,#19b765);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 8px #40e18a55)}
+.neon-svg{position:absolute;left:1px;top:1px;width:calc(100% - 2px);height:calc(100% - 2px);overflow:visible;pointer-events:none;z-index:3;filter:drop-shadow(0 0 4px #40e18a) drop-shadow(0 0 10px #40e18a99)}
+.neon-svg rect{fill:none;stroke-linecap:round}
+.neon-svg .base{stroke:#40e18a;stroke-opacity:.18;stroke-width:1}
+.neon-svg .tail{stroke:#40e18a;stroke-opacity:.5;stroke-width:2;stroke-dasharray:30 70}
+.neon-svg .head{stroke:#d8fff0;stroke-width:2.2;stroke-dasharray:14 86}
+@media(max-width:520px){.info-card{padding:15px}.info-bottom{gap:10px;margin-top:13px;padding-top:12px}.weather-side{gap:6px;max-width:56%}.weather-detail{font-size:10px}.contact-row{gap:8px}.contact-link{font-size:12px;padding:10px 11px}.wrap{padding:17px 13px 35px}.top{margin-bottom:30px}.tag{font-size:10px}.actions{gap:9px}.btn{padding:14px 9px;font-size:13px}iframe{height:360px}.hero{margin-bottom:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6fff2"/><stop offset="1" stop-color="#40e18a"/></linearGradient></defs><path d="M6 3h12c0 4.6-2 8-6 8s-6-3.4-6-8z" stroke="url(#lg)" stroke-width="1.6" fill="#40e18a18"/><path d="M8 5.2l1.8 3.4L12 5.2l2.2 3.4L16 5.2" stroke="#40e18a" stroke-width="1.4"/><path d="M12 11v8.2M8 21h8" stroke="url(#lg)" stroke-width="1.6"/></svg></div><span>WINE</span></div>
+    <div class="tag">HTML DEPLOYER</div>
+  </header>
+  <section class="dashboard" aria-label="Tanggal, jam, dan cuaca saat ini">
+    <div class="info-card">
+      <div class="date-label">📅 HARI · BULAN · TAHUN</div>
+      <div class="date-line" id="dateLine">Memuat tanggal…</div>
+      <div class="info-bottom">
+        <div class="clock-side"><div class="info-label">◷ JAM · MENIT · DETIK</div><div class="clock" id="clock">--:--:--</div></div>
+        <div class="weather-side" aria-label="Cuaca lokal"><div class="weather-icon" id="weatherIcon">🌍</div><div><div class="weather-temp" id="weatherTemp">--°C</div><div class="weather-detail" id="weatherDetail">Mengambil cuaca…</div><button class="weather-btn" id="weatherBtn" type="button">↻ Perbarui cuaca</button></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="hero">
+    <div class="eyebrow"><i class="dot"></i> YOUR WEBSITE, READY TO LAUNCH</div>
+    <h1>Build. Preview. <span class="accent">Deploy.</span></h1>
+    <p>Upload file HTML lu, lalu deploy jadi website atau bungkus jadi aplikasi Android (APK).</p>
+  </section>
+  <main class="panel">
+    <div class="tabs" role="tablist">
+      <button class="tab active" id="tabBtnDeploy" type="button" role="tab">🚀 Deploy HTML</button>
+      <button class="tab" id="tabBtnApk" type="button" role="tab">📱 Web2APK</button>
+    </div>
+    <div id="tabDeploy">
+    <div class="field">
+      <h2 class="section-title"><span class="num">01</span> Nama website</h2>
+      <label for="projectName">Nama proyek</label>
+      <input id="projectName" type="text" maxlength="60" placeholder="Contoh: Website-Winz" autocomplete="off">
+      <div class="hint">Nama ini dipakai sebagai identitas proyek lu.</div>
+    </div>
+    <div class="field">
+      <h2 class="section-title"><span class="num">02</span> Upload file HTML</h2>
+      <input id="fileInput" type="file" accept=".html,.htm,text/html" hidden>
+      <div id="dropZone" class="drop" role="button" tabindex="0" aria-label="Pilih file HTML">
+        <div class="upload-icon">↑</div>
+        <strong>Pilih file HTML dari perangkat</strong>
+        <span>Tekan untuk memilih atau tarik file ke sini · .html</span>
+      </div>
+      <div id="fileStatus" class="file-status"><span>📄</span><span class="filename" id="fileName">Belum ada file</span><b id="fileSize"></b></div>
+      <div class="hint">Untuk hasil terbaik, upload file HTML yang mandiri. File CSS, gambar, atau JS terpisah belum ikut otomatis.</div>
+    </div>
+    <div class="actions">
+      <button id="previewBtn" class="btn btn-preview" disabled><span>◉</span> Preview</button>
+      <button id="deployBtn" class="btn btn-deploy" disabled><span>↗</span> Deploy</button>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <section id="resultCard" class="result" aria-live="polite">
+      <div id="resultBadge" class="result-badge wait">⏳ Diproses</div>
+      <h3 id="resultTitle">Website lagi dibuild…</h3>
+      <div class="result-url"><span id="resultUrl">-</span><button id="copyBtn" type="button">Salin</button></div>
+      <a id="loginBtn" class="login-btn disabled" href="#" target="_blank" rel="noopener noreferrer"><span>🔐</span> Masuk ke Website <span>↗</span></a>
+      <div id="resultNote" class="result-note">Tombol aktif otomatis kalau build sudah selesai.</div>
+    </section>
+    <section id="previewPanel" class="preview-panel">
+      <div class="preview-head"><span style="display:flex;align-items:center;gap:10px;min-width:0"><span class="lights"><i></i><i></i><i></i></span><b id="previewTitle">Preview website</b></span><button id="closePreviewBtn" class="preview-close" type="button">✕ Tutup Preview</button></div>
+      <iframe id="previewFrame" title="Preview HTML" sandbox="allow-forms allow-scripts allow-modals allow-popups"></iframe>
+    </section>
+    </div>
+    <div id="tabApk" hidden>
+      <div class="field">
+        <h2 class="section-title"><span class="num">01</span> Info aplikasi</h2>
+        <label for="apkName">Nama aplikasi</label>
+        <input id="apkName" type="text" maxlength="40" placeholder="Contoh: Winz App" autocomplete="off">
+        <div class="hint" id="apkPkgHint">Package: com.wine.app</div>
+      </div>
+      <div class="field">
+        <h2 class="section-title"><span class="num">02</span> File HTML</h2>
+        <input id="apkFile" type="file" accept=".html,.htm,text/html">
+        <div class="hint">Pakai HTML mandiri (CSS, JS, dan gambar ada di dalam satu file). Isinya dibungkus jadi aplikasi Android.</div>
+      </div>
+      <div class="field">
+        <h2 class="section-title"><span class="num">03</span> Ikon aplikasi (opsional)</h2>
+        <input id="apkIcon" type="file" accept="image/*">
+        <div class="hint">Gambar persegi lebih bagus. Otomatis diubah jadi 192×192 px.</div>
+      </div>
+      <div class="actions" style="grid-template-columns:1fr"><button id="apkBtn" class="btn btn-deploy" disabled><span>📱</span> Build APK</button></div>
+      <div id="apkStatus" class="status" role="status" aria-live="polite"></div>
+      <section id="apkResult" class="result" aria-live="polite">
+        <div id="apkBadge" class="result-badge wait">⏳ Diproses</div>
+        <h3 id="apkTitle">APK lagi dibuild…</h3>
+        <div class="result-url"><span id="apkLink">-</span><button id="apkCopy" type="button">Salin</button></div>
+        <a id="apkDownload" class="login-btn disabled" href="#" target="_blank" rel="noopener noreferrer"><span>⬇</span> Download APK <span>↗</span></a>
+        <div id="apkNote" class="result-note">Tombol aktif otomatis kalau build selesai.</div>
+      </section>
+    </div>
+  </main>
+  <nav class="contact-row" aria-label="Kontak WINE"><a class="contact-link" href="https://t.me/aboutwinz" target="_blank" rel="noopener noreferrer">✈ Telegram <span>@aboutwinz</span></a><a class="contact-link" href="https://wa.me/6285883630287" target="_blank" rel="noopener noreferrer">☏ WhatsApp <span>Chat langsung</span></a></nav>
+  <footer class="footer">Made with <b>WINE</b> · Simple tools for creators</footer>
+</div>
+<script>
+(function(){
+var HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+var BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+var clockEl=document.getElementById('clock'), dateLine=document.getElementById('dateLine');
+function p(n){return n<10?'0'+n:''+n;}
+function tick(){
+  var n=new Date();
+  dateLine.textContent=HARI[n.getDay()]+', '+n.getDate()+' '+BULAN[n.getMonth()]+' '+n.getFullYear();
+  clockEl.textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());
+}
+tick(); setInterval(tick,1000);
+
+var codes={0:['Cerah','☀️'],1:['Cerah berawan','🌤️'],2:['Berawan sebagian','⛅'],3:['Mendung','☁️'],45:['Berkabut','🌫️'],48:['Kabut tebal','🌫️'],51:['Gerimis ringan','🌦️'],53:['Gerimis','🌦️'],55:['Gerimis lebat','🌧️'],56:['Gerimis beku','🌧️'],57:['Gerimis beku lebat','🌧️'],61:['Hujan ringan','🌦️'],63:['Hujan','🌧️'],65:['Hujan lebat','🌧️'],66:['Hujan beku','🌧️'],67:['Hujan beku lebat','🌧️'],71:['Salju ringan','🌨️'],73:['Salju','🌨️'],75:['Salju lebat','❄️'],77:['Butiran salju','🌨️'],80:['Hujan lokal','🌦️'],81:['Hujan lokal','🌧️'],82:['Hujan lokal lebat','⛈️'],85:['Hujan salju','🌨️'],86:['Hujan salju lebat','🌨️'],95:['Badai petir','⛈️'],96:['Badai petir + hujan es','⛈️'],99:['Badai petir kuat','⛈️']};
+var btn=document.getElementById('weatherBtn'), icon=document.getElementById('weatherIcon'), temp=document.getElementById('weatherTemp'), detail=document.getElementById('weatherDetail');
+var last=null;
+
+function fetchJSON(url,ms){
+  return new Promise(function(res,rej){
+    var done=false;
+    var t=setTimeout(function(){if(!done){done=true;rej(new Error('timeout'));}},ms||10000);
+    fetch(url).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(d){if(!done){done=true;clearTimeout(t);res(d);}})
+    .catch(function(e){if(!done){done=true;clearTimeout(t);rej(e);}});
+  });
+}
+function byGPS(){
+  return new Promise(function(res,rej){
+    if(!navigator.geolocation)return rej(new Error('GPS tidak didukung'));
+    navigator.geolocation.getCurrentPosition(function(x){res({lat:x.coords.latitude,lon:x.coords.longitude,place:''});},function(e){rej(e);},{enableHighAccuracy:false,timeout:7000,maximumAge:300000});
+  });
+}
+function byIP(){
+  return fetchJSON('https://get.geojs.io/v1/ip/geo.json',8000).then(function(d){
+    if(!d.latitude)throw new Error('ip');
+    return {lat:parseFloat(d.latitude),lon:parseFloat(d.longitude),place:d.city||d.region||''};
+  });
+}
+function byIP2(){
+  return fetchJSON('https://ipwho.is/',8000).then(function(d){
+    if(!d.latitude)throw new Error('ip2');
+    return {lat:d.latitude,lon:d.longitude,place:d.city||d.region||''};
+  });
+}
+function render(){
+  if(!last)return;
+  var c=last.cur, info=codes[c.weather_code]||['Kondisi tidak diketahui','🌍'];
+  icon.textContent=info[1];
+  temp.textContent=Math.round(c.temperature_2m)+'°C';
+  detail.textContent=(last.place?last.place+' · ':'')+info[0]+' · Terasa '+Math.round(c.apparent_temperature)+'°C · Lembap '+c.relative_humidity_2m+'%';
+}
+function loadWeather(){
+  btn.disabled=true; btn.textContent='Mencari lokasi…'; detail.textContent='Mengambil cuaca…';
+  byGPS().catch(function(){return byIP();}).catch(function(){return byIP2();})
+  .catch(function(){return {lat:-6.2,lon:106.8167,place:'Jakarta'};})
+  .then(function(loc){
+    var url='https://api.open-meteo.com/v1/forecast?latitude='+loc.lat+'&longitude='+loc.lon+'&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code&timezone=auto';
+    return fetchJSON(url,10000).then(function(d){
+      if(!d||!d.current)throw new Error('data kosong');
+      last={cur:d.current,place:loc.place};
+      render();
+      btn.textContent='↻ Perbarui cuaca';
+      if(!loc.place){
+        fetchJSON('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+loc.lat+'&longitude='+loc.lon+'&localityLanguage=id',8000)
+        .then(function(g){last.place=g.city||g.locality||g.principalSubdivision||'';render();}).catch(function(){});
+      }
+    });
+  })
+  .catch(function(e){
+    detail.textContent='Gagal ambil cuaca ('+(e&&e.message?e.message:'error')+'). Cek internet lalu coba lagi.';
+    btn.textContent='↻ Coba lagi';
+  })
+  .then(function(){btn.disabled=false;});
+}
+btn.addEventListener('click',loadWeather);
+loadWeather();
+setInterval(loadWeather,15*60*1000);
+})();
+</script>
+<script>
+// ====== ISI TOKEN VERCEL LU DI SINI ======
+var VERCEL_TOKEN = 'ISI_TOKEN_VERCEL_DI_SINI';
+// =========================================
+function askToken(kind){
+  return new Promise(function(res){
+    var nm = kind==='vercel' ? 'Vercel' : 'GitHub';
+    var ov=document.createElement('div');
+    ov.style.cssText='position:fixed;left:0;top:0;right:0;bottom:0;z-index:99;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:18px';
+    ov.innerHTML='<div style="width:min(420px,100%);background:#0d1a14;border:1px solid #2a593b;border-radius:18px;padding:20px;box-shadow:0 0 30px rgba(64,225,138,.2);color:#effaf3;font-family:inherit"><div style="font-weight:850;font-size:16px;margin-bottom:6px">Token '+nm+'</div><div style="font-size:12px;color:#91a99a;margin-bottom:12px;line-height:1.5">Tempel token '+nm+' lu. Disimpan di perangkat ini saja dan tidak masuk ke file.</div><input id="tkIn" type="password" autocomplete="off" placeholder="Tempel token di sini" style="width:100%;border:1px solid #294535;background:#08130d;color:#effaf3;border-radius:12px;padding:13px 14px;font:inherit;outline:none"><div style="display:flex;gap:8px;margin-top:14px"><button id="tkNo" type="button" style="flex:1;border:1px solid #2c4936;background:#17271d;color:#effaf3;border-radius:11px;padding:12px;font:inherit;font-weight:800;cursor:pointer">Batal</button><button id="tkOk" type="button" style="flex:1;border:0;background:linear-gradient(110deg,#40e18a,#27c873);color:#052212;border-radius:11px;padding:12px;font:inherit;font-weight:800;cursor:pointer">Simpan</button></div></div>';
+    document.body.appendChild(ov);
+    var inp=ov.querySelector('#tkIn'); setTimeout(function(){ inp.focus(); },50);
+    function done(v){ ov.remove(); res(v); }
+    ov.querySelector('#tkNo').onclick=function(){ done(''); };
+    ov.querySelector('#tkOk').onclick=function(){ done(inp.value.trim()); };
+  });
+}
+async function ensureToken(kind){
+  var isV = kind==='vercel';
+  var cur = isV ? VERCEL_TOKEN : GITHUB_TOKEN;
+  var ph = isV ? 'ISI_TOKEN_VERCEL_'+'DI_SINI' : 'ISI_TOKEN_GITHUB_'+'DI_SINI';
+  if (cur && cur !== ph) return String(cur).trim();
+  var key='wine_'+kind+'_token', saved='';
+  try{ saved=localStorage.getItem(key)||''; }catch(e){}
+  if (!saved) {
+    saved = await askToken(kind);
+    if (saved) { try{ localStorage.setItem(key,saved); }catch(e){} }
+  }
+  return saved;
+}
+var fileInput = document.getElementById('fileInput');
+var dropZone = document.getElementById('dropZone');
+var projectName = document.getElementById('projectName');
+var previewBtn = document.getElementById('previewBtn');
+var deployBtn = document.getElementById('deployBtn');
+var statusBox = document.getElementById('status');
+var previewPanel = document.getElementById('previewPanel');
+var previewFrame = document.getElementById('previewFrame');
+var fileStatus = document.getElementById('fileStatus');
+var resultCard = document.getElementById('resultCard');
+var resultBadge = document.getElementById('resultBadge');
+var resultTitle = document.getElementById('resultTitle');
+var resultUrl = document.getElementById('resultUrl');
+var resultNote = document.getElementById('resultNote');
+var loginBtn = document.getElementById('loginBtn');
+var copyBtn = document.getElementById('copyBtn');
+var selectedFile = null;
+var htmlText = '';
+
+function showStatus(message, type) {
+  statusBox.className = 'status show ' + (type || 'info');
+  statusBox.textContent = message;
+}
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/1024/1024).toFixed(2) + ' MB';
+}
+function updateButtons() {
+  previewBtn.disabled = !selectedFile;
+  deployBtn.disabled = !(selectedFile && projectName.value.trim());
+}
+function toUrl(u) { return u.indexOf('http') === 0 ? u : 'https://' + u; }
+function renderResult(url, ready) {
+  resultCard.classList.add('show');
+  resultUrl.textContent = url;
+  loginBtn.href = url;
+  if (ready) {
+    resultBadge.className = 'result-badge';
+    resultBadge.textContent = '✓ Online';
+    resultTitle.textContent = 'Website lu sudah live! 🎉';
+    resultNote.textContent = 'Klik tombol di atas untuk masuk ke website lu.';
+    loginBtn.classList.remove('disabled');
+  } else {
+    resultBadge.className = 'result-badge wait';
+    resultBadge.textContent = '⏳ Diproses';
+    resultTitle.textContent = 'Website lagi dibuild…';
+    resultNote.textContent = 'Tombol aktif otomatis kalau build sudah selesai.';
+    loginBtn.classList.add('disabled');
+  }
+  resultCard.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+async function waitReady(id, fallbackUrl) {
+  for (var i = 0; i < 60; i++) {
+    await new Promise(function(r){ setTimeout(r, 2500); });
+    var d = null;
+    try {
+      var r = await fetch('https://api.vercel.com/v13/deployments/' + id, {headers: {'Authorization': 'Bearer ' + VERCEL_TOKEN.trim()}});
+      d = await r.json();
+    } catch (e) { continue; }
+    if (d.readyState === 'READY') {
+      var a = (Array.isArray(d.alias) && d.alias.length) ? d.alias[0] : (d.url || fallbackUrl);
+      return toUrl(a);
+    }
+    if (d.readyState === 'ERROR' || d.readyState === 'CANCELED') throw new Error('Build gagal di Vercel.');
+  }
+  return null;
+}
+function chooseFile(file) {
+  if (!file) return;
+  if (!/\.html?$/i.test(file.name) && file.type !== 'text/html') {
+    showStatus('File harus berformat .html atau .htm ya, bro.', 'error');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showStatus('Ukuran file maksimal 5 MB untuk panel ini.', 'error');
+    return;
+  }
+  selectedFile = file;
+  var reader = new FileReader();
+  reader.onload = function() {
+    htmlText = String(reader.result || '');
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = formatBytes(file.size);
+    fileStatus.classList.add('show');
+    dropZone.querySelector('strong').textContent = 'File HTML berhasil dipilih';
+    dropZone.querySelector('span').textContent = 'Tekan area ini untuk mengganti file';
+    updateButtons();
+    showStatus('File berhasil dimuat. Tekan Preview untuk memeriksa tampilannya sebelum deploy.', 'info');
+  };
+  reader.onerror = function() { showStatus('File tidak bisa dibaca. Coba pilih ulang.', 'error'); };
+  reader.readAsText(file);
+}
+dropZone.addEventListener('click', function(){ fileInput.click(); });
+dropZone.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+fileInput.addEventListener('change', function(e){ chooseFile(e.target.files[0]); });
+projectName.addEventListener('input', updateButtons);
+['dragenter','dragover'].forEach(function(n){ dropZone.addEventListener(n, function(e){e.preventDefault();dropZone.classList.add('drag');}); });
+['dragleave','drop'].forEach(function(n){ dropZone.addEventListener(n, function(e){e.preventDefault();dropZone.classList.remove('drag');}); });
+dropZone.addEventListener('drop', function(e){ chooseFile(e.dataTransfer.files[0]); });
+
+copyBtn.addEventListener('click', async function() {
+  try { await navigator.clipboard.writeText(resultUrl.textContent); }
+  catch (e) {
+    var t = document.createElement('textarea'); t.value = resultUrl.textContent;
+    document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (_) {} t.remove();
+  }
+  copyBtn.textContent = 'Tersalin ✓';
+  setTimeout(function(){ copyBtn.textContent = 'Salin'; }, 1800);
+});
+
+document.getElementById('closePreviewBtn').addEventListener('click', function() {
+  previewPanel.classList.remove('show');
+  previewFrame.srcdoc = '';
+  showStatus('Preview ditutup. File HTML tetap tersimpan untuk dibuka lagi.', 'info');
+});
+
+previewBtn.addEventListener('click', function() {
+  if (!selectedFile || !htmlText) return;
+  previewFrame.srcdoc = htmlText;
+  previewPanel.classList.add('show');
+  document.getElementById('previewTitle').textContent = projectName.value.trim() || selectedFile.name;
+  showStatus('Preview dibuka di bawah. Periksa hasilnya dulu sebelum menekan Deploy.', 'info');
+  previewPanel.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+deployBtn.addEventListener('click', async function() {
+  if (!selectedFile || !projectName.value.trim()) {
+    showStatus('Isi nama website dan upload file HTML dulu.', 'warn');
+    return;
+  }
+  var vt = await ensureToken('vercel');
+  if (!vt) { showStatus('Token Vercel belum diisi.', 'warn'); return; }
+  VERCEL_TOKEN = vt;
+  deployBtn.disabled = true;
+  deployBtn.textContent = 'Menyiapkan…';
+  resultCard.classList.remove('show');
+  try {
+    var response = await fetch('https://api.vercel.com/v13/deployments', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + VERCEL_TOKEN.trim(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: projectName.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 52),
+        files: [{file: 'index.html', data: htmlText, encoding: 'utf-8'}],
+        projectSettings: {framework: null}
+      })
+    });
+    var data = await response.json().catch(function(){ return {}; });
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) { try { localStorage.removeItem('wine_vercel_token'); } catch (e) {} }
+      var em = (data.error && data.error.message) ? data.error.message : (typeof data.error === 'string' ? data.error : 'Vercel menolak deploy. Cek token dan izin token.');
+      throw new Error(em);
+    }
+    if (!data.url) throw new Error('Vercel belum mengembalikan URL website.');
+    var firstUrl = toUrl(data.url);
+    showStatus('Deploy terkirim. Menunggu Vercel selesai build…', 'info');
+    renderResult(firstUrl, false);
+    var finalUrl = await waitReady(data.id, firstUrl);
+    if (finalUrl) {
+      renderResult(finalUrl, true);
+      showStatus('Deploy berhasil! Website lu sudah online.', 'info');
+    } else {
+      renderResult(firstUrl, true);
+      showStatus('Build masih lama, tapi link sudah dibuat. Coba buka tombolnya sebentar lagi.', 'warn');
+    }
+  } catch (err) {
+    showStatus('Deploy belum berhasil: ' + err.message + ' Jika error CORS muncul, browser memblokir metode satu-HTML ini dan backend diperlukan.', 'warn');
+  } finally {
+    deployBtn.innerHTML = '<span>↗</span> Deploy';
+    updateButtons();
+  }
+});
+</script>
+<script>
+// ====== ISI TOKEN GITHUB LU DI SINI (izin: repo + workflow) ======
+var GITHUB_TOKEN = 'ISI_TOKEN_GITHUB_DI_SINI';
+// =================================================================
+(function(){
+var $ = function(id){ return document.getElementById(id); };
+var tabDeploy=$('tabDeploy'), tabApk=$('tabApk'), bD=$('tabBtnDeploy'), bA=$('tabBtnApk');
+function setTab(t){
+  tabDeploy.hidden = t!=='deploy'; tabApk.hidden = t!=='apk';
+  bD.classList.toggle('active', t==='deploy'); bA.classList.toggle('active', t==='apk');
+}
+bD.addEventListener('click', function(){ setTab('deploy'); });
+bA.addEventListener('click', function(){ setTab('apk'); });
+
+var apkName=$('apkName'), apkFile=$('apkFile'), apkIcon=$('apkIcon'), apkBtn=$('apkBtn'), apkStatus=$('apkStatus');
+var apkHtml='';
+function slugOf(n){ return n.toLowerCase().replace(/[^a-z0-9]/g,''); }
+function scrubSecrets(h){
+  var n=0;
+  h=h.replace(/(var\s+(?:VERCEL|GITHUB)_TOKEN\s*=\s*)(['"])(?!ISI_TOKEN)[^'"]*\2/g,function(m,a,q){ if(m.length>a.length+2) n++; return a+q+q; });
+  h=h.replace(/gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|vcp_[A-Za-z0-9_]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|xox[abprs]-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{35}|gsk_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9_-]{20,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|[sr]k_live_[A-Za-z0-9]{16,}/g,function(){ n++; return 'TOKEN_DIHAPUS'; });
+  return {html:h,count:n};
+}
+function pkgOf(n){ return 'com.wine.app' + slugOf(n); }
+function say(m,t){ apkStatus.className='status show '+(t||'info'); apkStatus.textContent=m; }
+function sleep(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
+function xmlEsc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function refresh(){
+  $('apkPkgHint').textContent = 'Package: ' + pkgOf(apkName.value);
+  apkBtn.disabled = !(apkHtml && apkName.value.trim());
+}
+apkName.addEventListener('input', refresh);
+apkFile.addEventListener('change', function(e){
+  var f=e.target.files[0]; if(!f) return;
+  if(f.size>5*1024*1024){ say('Ukuran file maksimal 5 MB.','error'); return; }
+  var r=new FileReader();
+  r.onload=function(){ var sc=scrubSecrets(String(r.result||'')); apkHtml=sc.html; say(sc.count?('File '+f.name+' siap. '+sc.count+' token rahasia otomatis dihapus dari isi APK supaya tidak bocor atau diblokir GitHub. Kalau aplikasinya butuh token, isi nanti di dalam aplikasi.'):('File '+f.name+' siap dibungkus jadi APK.'), sc.count?'warn':'info'); refresh(); };
+  r.onerror=function(){ say('File tidak bisa dibaca.','error'); };
+  r.readAsText(f);
+});
+function readIcon(){
+  return new Promise(function(res){
+    var f=apkIcon.files[0]; if(!f) return res(null);
+    var fr=new FileReader();
+    fr.onload=function(){
+      var im=new Image();
+      im.onload=function(){
+        try{
+          var c=document.createElement('canvas'); c.width=192; c.height=192;
+          c.getContext('2d').drawImage(im,0,0,192,192);
+          res(c.toDataURL('image/png').split(',')[1]);
+        }catch(e){ res(null); }
+      };
+      im.onerror=function(){ res(null); };
+      im.src=fr.result;
+    };
+    fr.onerror=function(){ res(null); };
+    fr.readAsDataURL(f);
+  });
+}
+function gh(path, opt){
+  opt=opt||{};
+  var h={'Authorization':'Bearer '+GITHUB_TOKEN.trim(),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  if(opt.body) h['Content-Type']='application/json';
+  return fetch('https://api.github.com'+path,{method:opt.method||'GET',headers:h,body:opt.body?JSON.stringify(opt.body):undefined})
+  .then(function(r){
+    return r.text().then(function(t){
+      var d={}; try{ d=t?JSON.parse(t):{}; }catch(e){}
+      if(!r.ok){ var er=new Error(d.message||('HTTP '+r.status)); er.status=r.status; throw er; }
+      return d;
+    });
+  });
+}
+async function putFile(o,rp,path,content,branch){
+  for(var i=0;i<4;i++){
+    try{
+      await gh('/repos/'+o+'/'+rp+'/contents/'+path,{method:'PUT',body:{message:'add '+path,content:content,branch:branch}});
+      return;
+    }catch(e){ if(i===3) throw e; await sleep(1500); }
+  }
+}
+function buildFiles(name, pkg, slug, icon){
+  var pkgPath=pkg.replace(/\./g,'/');
+  var f={};
+  f['settings.gradle']="pluginManagement {\n  repositories { google(); mavenCentral(); gradlePluginPortal() }\n}\ndependencyResolutionManagement {\n  repositories { google(); mavenCentral() }\n}\nrootProject.name = 'WebApp'\ninclude ':app'\n";
+  f['build.gradle']="plugins {\n  id 'com.android.application' version '8.5.2' apply false\n}\n";
+  f['app/build.gradle']="plugins {\n  id 'com.android.application'\n}\nandroid {\n  namespace '"+pkg+"'\n  compileSdk 34\n  defaultConfig {\n    applicationId '"+pkg+"'\n    minSdk 21\n    targetSdk 34\n    versionCode 1\n    versionName '1.0'\n  }\n  compileOptions {\n    sourceCompatibility JavaVersion.VERSION_17\n    targetCompatibility JavaVersion.VERSION_17\n  }\n}\n";
+  f['app/src/main/AndroidManifest.xml']='<?xml version="1.0" encoding="utf-8"?>\n<manifest xmlns:android="http://schemas.android.com/apk/res/android">\n  <uses-permission android:name="android.permission.INTERNET"/>\n  <application android:label="'+xmlEsc(name)+'"'+(icon?' android:icon="@mipmap/ic_launcher"':'')+' android:usesCleartextTraffic="true" android:theme="@android:style/Theme.DeviceDefault.NoActionBar">\n    <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden">\n      <intent-filter>\n        <action android:name="android.intent.action.MAIN"/>\n        <category android:name="android.intent.category.LAUNCHER"/>\n      </intent-filter>\n    </activity>\n  </application>\n</manifest>\n';
+  f['app/src/main/java/'+pkgPath+'/MainActivity.java']=[
+    'package PKG;',
+    'import android.app.Activity;',
+    'import android.content.Intent;',
+    'import android.net.Uri;',
+    'import android.os.Bundle;',
+    'import android.view.KeyEvent;',
+    'import android.webkit.ValueCallback;',
+    'import android.webkit.WebChromeClient;',
+    'import android.webkit.WebSettings;',
+    'import android.webkit.WebView;',
+    'import android.webkit.WebViewClient;',
+    'public class MainActivity extends Activity {',
+    '  private WebView web;',
+    '  private ValueCallback<Uri[]> filePathCallback;',
+    '  private static final int FILE_REQ = 1001;',
+    '  @Override protected void onCreate(Bundle b) {',
+    '    super.onCreate(b);',
+    '    web = new WebView(this);',
+    '    setContentView(web);',
+    '    WebSettings s = web.getSettings();',
+    '    s.setJavaScriptEnabled(true);',
+    '    s.setDomStorageEnabled(true);',
+    '    s.setAllowFileAccess(true);',
+    '    s.setMediaPlaybackRequiresUserGesture(false);',
+    '    web.setWebViewClient(new WebViewClient() {',
+    '      @Override public boolean shouldOverrideUrlLoading(WebView v, String url) {',
+    '        if (url.startsWith("file:") || url.startsWith("about:") || url.startsWith("javascript:")) return false;',
+    '        try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception e) { }',
+    '        return true;',
+    '      }',
+    '    });',
+    '    web.setWebChromeClient(new WebChromeClient() {',
+    '      @Override public boolean onShowFileChooser(WebView v, ValueCallback<Uri[]> cb, FileChooserParams p) {',
+    '        if (filePathCallback != null) filePathCallback.onReceiveValue(null);',
+    '        filePathCallback = cb;',
+    '        Intent i = new Intent(Intent.ACTION_GET_CONTENT);',
+    '        i.addCategory(Intent.CATEGORY_OPENABLE);',
+    '        i.setType("*/*");',
+    '        try { startActivityForResult(Intent.createChooser(i, "Pilih file"), FILE_REQ); }',
+    '        catch (Exception e) { filePathCallback = null; return false; }',
+    '        return true;',
+    '      }',
+    '    });',
+    '    web.loadUrl("file:///android_asset/index.html");',
+    '  }',
+    '  @Override protected void onActivityResult(int req, int res, Intent data) {',
+    '    if (req == FILE_REQ && filePathCallback != null) {',
+    '      Uri[] r = null;',
+    '      if (res == RESULT_OK && data != null && data.getData() != null) r = new Uri[]{ data.getData() };',
+    '      filePathCallback.onReceiveValue(r);',
+    '      filePathCallback = null;',
+    '    }',
+    '    super.onActivityResult(req, res, data);',
+    '  }',
+    '  @Override public boolean onKeyDown(int k, KeyEvent e) {',
+    '    if (k == KeyEvent.KEYCODE_BACK && web.canGoBack()) { web.goBack(); return true; }',
+    '    return super.onKeyDown(k, e);',
+    '  }',
+    '}',
+    ''].join('\n');
+  f['.github/workflows/build.yml']=[
+    'name: Build APK',
+    'on: workflow_dispatch',
+    'permissions:',
+    '  contents: write',
+    'jobs:',
+    '  build:',
+    '    runs-on: ubuntu-latest',
+    '    steps:',
+    '      - uses: actions/checkout@v4',
+    '      - uses: actions/setup-java@v4',
+    '        with:',
+    '          distribution: temurin',
+    '          java-version: 17',
+    '      - uses: gradle/actions/setup-gradle@v4',
+    '        with:',
+    '          gradle-version: 8.9',
+    '      - run: gradle assembleDebug --no-daemon',
+    '      - name: Release',
+    '        env:',
+    '          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}',
+    '        run: |',
+    '          cp app/build/outputs/apk/debug/app-debug.apk '+slug+'.apk',
+    '          gh release create v1 '+slug+'.apk --title "APK" --notes "Build otomatis dari WINE Web2APK"',
+    ''].join('\n');
+  return f;
+}
+function showResult(url, repoUrl, ready){
+  $('apkResult').classList.add('show');
+  $('apkLink').textContent = url || 'Menunggu build…';
+  var dl=$('apkDownload');
+  if(ready){
+    $('apkBadge').className='result-badge'; $('apkBadge').textContent='✓ Selesai';
+    $('apkTitle').textContent='APK lu sudah jadi! 🎉';
+    $('apkNote').textContent='Buka link di HP Android, lalu izinkan install dari sumber ini. Repo build: '+repoUrl;
+    dl.href=url; dl.classList.remove('disabled');
+  }else{
+    $('apkBadge').className='result-badge wait'; $('apkBadge').textContent='⏳ Diproses';
+    $('apkTitle').textContent='APK lagi dibuild…';
+    $('apkNote').textContent='Tombol aktif otomatis kalau build selesai.';
+    dl.classList.add('disabled');
+  }
+}
+$('apkCopy').addEventListener('click', async function(){
+  var t=$('apkLink').textContent;
+  try{ await navigator.clipboard.writeText(t); }catch(e){
+    var x=document.createElement('textarea'); x.value=t; document.body.appendChild(x); x.select();
+    try{ document.execCommand('copy'); }catch(_){} x.remove();
+  }
+  $('apkCopy').textContent='Tersalin ✓'; setTimeout(function(){ $('apkCopy').textContent='Salin'; },1800);
+});
+
+apkBtn.addEventListener('click', async function(){
+  var name=apkName.value.trim();
+  if(!name||!apkHtml){ say('Isi nama aplikasi dan pilih file HTML dulu.','warn'); return; }
+  var gt=await ensureToken('github');
+  if(!gt){ say('Token GitHub belum diisi (izin: repo + workflow).','warn'); return; }
+  GITHUB_TOKEN=gt;
+  apkBtn.disabled=true; $('apkResult').classList.remove('show');
+  try{
+    var pkg=pkgOf(name), slug=slugOf(name)||'app';
+    say('1/5 Menyiapkan ikon dan project…');
+    var icon=await readIcon();
+    say('2/5 Membuat repo build di GitHub…');
+    var me=await gh('/user'); var owner=me.login;
+    var repo='apk-'+slug+'-'+Math.random().toString(36).slice(2,7);
+    var rc=await gh('/user/repos',{method:'POST',body:{name:repo,private:false,auto_init:true,description:'APK build by WINE Web2APK'}});
+    var branch=rc.default_branch||'main';
+    var repoUrl='https://github.com/'+owner+'/'+repo;
+    await sleep(2500);
+    say('3/5 Mengunggah file project…');
+    var files=buildFiles(name,pkg,slug,icon);
+    var keys=Object.keys(files);
+    for(var i=0;i<keys.length;i++){ await putFile(owner,repo,keys[i],b64(files[keys[i]]),branch); }
+    await putFile(owner,repo,'app/src/main/assets/index.html',b64(apkHtml),branch);
+    if(icon) await putFile(owner,repo,'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png',icon,branch);
+    say('4/5 Menjalankan build APK…');
+    for(var d=0;d<10;d++){
+      try{ await gh('/repos/'+owner+'/'+repo+'/actions/workflows/build.yml/dispatches',{method:'POST',body:{ref:branch}}); break; }
+      catch(e){ if(d===9) throw e; await sleep(3000); }
+    }
+    showResult('',repoUrl,false);
+    var t0=Date.now(), done=false;
+    for(var p=0;p<300;p++){
+      await sleep(5000);
+      var sec=Math.round((Date.now()-t0)/1000);
+      var runs=null;
+      try{ runs=await gh('/repos/'+owner+'/'+repo+'/actions/runs?per_page=1'); }catch(e){ continue; }
+      var run=runs.workflow_runs&&runs.workflow_runs[0];
+      if(!run){ say('5/5 Menunggu GitHub mulai build… ('+sec+' dtk)'); continue; }
+      if(run.status==='completed'){
+        if(run.conclusion==='success'){ done=true; break; }
+        throw new Error('Build gagal di GitHub. Cek lognya: '+run.html_url);
+      }
+      say('5/5 '+(run.status==='queued'?'Antre di GitHub':'Sedang build APK (biasanya 3–6 menit)')+'… '+sec+' dtk');
+    }
+    if(!done) throw new Error('Build terlalu lama. Cek di '+repoUrl+'/actions');
+    var url='';
+    for(var k=0;k<10;k++){
+      try{
+        var rel=await gh('/repos/'+owner+'/'+repo+'/releases/tags/v1');
+        if(rel.assets&&rel.assets.length){ url=rel.assets[0].browser_download_url; break; }
+      }catch(e){}
+      await sleep(3000);
+    }
+    if(!url) throw new Error('APK belum muncul di release. Cek '+repoUrl+'/releases');
+    showResult(url,repoUrl,true);
+    say('Build berhasil! APK siap didownload.','info');
+  }catch(err){
+    var m=err&&err.message?err.message:'error';
+    if(/workflow/i.test(m)&&/scope|refus|permission/i.test(m)) m+=' (Token GitHub butuh izin repo + workflow.)';
+    if(err&&err.status===401){ try{ localStorage.removeItem('wine_github_token'); }catch(_){} m='Token GitHub tidak valid atau kedaluwarsa. Coba build lagi untuk isi ulang token.'; }
+    say('Web2APK belum berhasil: '+m,'error');
+  }finally{ refresh(); }
+});
+})();
+</script>
+<script>
+(function(){
+try{
+var NS='http://www.w3.org/2000/svg';
+var list=[['.info-card',5],['.panel',8],['.result',4],['.preview-panel',7],['.contact-link',3.5],['.file-status',4.5],['.logo',3]];
+var items=[];
+function add(el,dur){
+  for(var i=0;i<el.children.length;i++){ if(el.children[i].classList&&el.children[i].classList.contains('neon-svg')) return; }
+  var svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('class','neon-svg'); svg.setAttribute('aria-hidden','true');
+  var rad=Math.max((parseFloat(getComputedStyle(el).borderTopLeftRadius)||0)-1,0);
+  var rs={};
+  ['base','tail','head'].forEach(function(c){
+    var r=document.createElementNS(NS,'rect');
+    r.setAttribute('class',c); r.setAttribute('x','0'); r.setAttribute('y','0');
+    r.setAttribute('width','100%'); r.setAttribute('height','100%');
+    r.setAttribute('rx',rad); r.setAttribute('ry',rad);
+    svg.appendChild(r); rs[c]=r;
+  });
+  el.appendChild(svg);
+  items.push({head:rs.head,tail:rs.tail,dur:dur});
+}
+list.forEach(function(p){
+  var els=document.querySelectorAll(p[0]);
+  for(var i=0;i<els.length;i++) add(els[i],p[1]+(i*0.7));
+});
+function frame(ts){
+  for(var i=0;i<items.length;i++){
+    var it=items[i], L=0;
+    try{ L=it.head.getTotalLength(); }catch(e){ L=0; }
+    if(L>0){
+      var pr=((ts/1000)/it.dur)%1, h=L*0.14, t=L*0.30;
+      it.head.style.strokeDasharray=h+' '+(L-h);
+      it.tail.style.strokeDasharray=t+' '+(L-t);
+      it.head.style.strokeDashoffset=(-pr*L)+'';
+      it.tail.style.strokeDashoffset=(-pr*L+L*0.16)+'';
+    }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+}catch(e){}
+})();
+</script>
+</body>
+</html>
